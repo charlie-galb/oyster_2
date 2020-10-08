@@ -2,30 +2,30 @@ require 'journey'
 require 'oystercard'
 
 describe Journey do
-  let(:station) { double :station, zone: 1 }
-  let(:card) { double card: "High Barnet" }
+  #let(:station) { double('fake station', name: "High Barnet", zone: 1) }
+  #let(:card) { card.new("High Barnet") }
 
-  it "records if a journey is complete" do 
-    card = Oystercard.new
-    expect(card.journey).not_to be_completed
-  end
-
-  it "creates a new journey on touch in" do 
+  it "creates a new journey on touch in" do
     card = Oystercard.new
     card.top_up(10)
     card.touch_in("High Barnet")
     expect(card.journey).to be_an_instance_of(Journey)
-  end 
+  end
 
-  it "creates a new journey on touch in" do 
-    card = Oystercard.new
-    card.top_up(10)
-    card.touch_out("High Barnet")
-    expect(card.journey).to be_an_instance_of(Journey)
-  end 
+  it "stores the entry station" do
+    journey = Journey.new("High Barnet")
+    expect(journey.entry_station).to eq("High Barnet")
+  end
 
-  expect(journey.entry_station).to 
+  it "stores the entry station" do
+    journey = Journey.new("High Barnet")
+    journey.touch_out("Colliers Wood")
+    expect(journey.exit_station).to eq("Colliers Wood")
+  end
 
-  # it "checks a new staion has been updated" do 
-  #   expect(station.entry_station).to eq station
-end 
+  it "stores the whole journey" do
+    journey = Journey.new("High Barnet")
+    journey.touch_out("Colliers Wood")
+    expect(journey.log).to eq({entry_station: "High Barnet", exit_station: "Colliers Wood"})
+  end
+end

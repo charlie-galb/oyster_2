@@ -9,7 +9,7 @@ describe Oystercard do
     expect(card.balance).to be_zero
   end
 
-  it 'initializes @journeys with an empty array' do 
+  it 'initializes @journeys with an empty array' do
     expect(card.journeys).to be_empty
   end
 
@@ -52,18 +52,18 @@ describe Oystercard do
   end
 
   describe '#store_journey' do
-    it 'stores the journey in @journeys' do 
+    it 'stores the journey in @journeys' do
       card.top_up(10)
       card.touch_in(mock_entry)
       card.touch_out(mock_exit)
-      expect(card.journeys).to include({entry: mock_entry, exit: mock_exit})
-    end   
+      expect(card.journeys).to include({entry_station: mock_entry, exit_station: mock_exit})
+    end
   end
 
-  it 'remembers multiple journeys' do 
+  it 'remembers multiple journeys' do
     card.top_up(10)
 
-    2.times { 
+    2.times {
       card.touch_in(mock_entry)
       card.touch_out(mock_exit)
     }
