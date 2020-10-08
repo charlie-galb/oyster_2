@@ -1,6 +1,8 @@
+require_relative 'station'
+
 class Oystercard
 
-  attr_reader :balance, :journeys
+  attr_reader :balance, :journeys, :journey
 
   DEFAULT_MAX = 90
   MIN_FARE = 1
@@ -18,6 +20,7 @@ class Oystercard
 
   def touch_in(entry_station)
     raise "INSUFFICIENT FUNDS" if insufficient_funds?
+    @journey = Journey.new
     @current_journey[:entry] = entry_station
   end
 
