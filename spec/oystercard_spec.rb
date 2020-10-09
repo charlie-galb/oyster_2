@@ -77,10 +77,17 @@ describe Oystercard do
   end
 
   describe "#fare" do
+
+    let(:mock_journey) { double('fake journey', nil?: false) }
+
     before do
       card.top_up(20)
     end
+
     it 'returns the minimum fare if users behave correctly' do
+      allow(Journey).to receive(:new).and_return(mock_journey)
+      allow(mock_journey).to receive(:log_exit)
+      allow(mock_journey).to receive(:log).and_return({entry: mock_entry, exit: mock_exit})
       card.touch_in(mock_entry)
       card.touch_out(mock_exit)
       expect(card.fare).to eq(1)
@@ -90,6 +97,8 @@ describe Oystercard do
       expect(card.fare).to eq(6)
     end
     it 'returns the penalty fare if a user forgets to #touch_out' do
+      allow(Journey).to receive(:new).and_return(mock_journey)
+      allow(mock_journey).to receive(:log).and_return({entry: mock_entry})
       card.touch_in("East Finchley")
       expect(card.fare).to eq(6)
     end

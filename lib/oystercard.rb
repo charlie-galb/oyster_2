@@ -18,9 +18,9 @@ class Oystercard
     add_money(cash)
   end
 
-  def touch_in(entry_station)
+  def touch_in(entry_station, journey = Journey)
     raise "INSUFFICIENT FUNDS" if insufficient_funds?
-    @journey = Journey.new(entry_station)
+    @journey = journey.new(entry_station)
   end
 
   def in_journey?
