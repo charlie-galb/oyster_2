@@ -21,12 +21,12 @@ describe Journey do
   end
 
   it "stores the exit station" do
-    journey.touch_out(mock_exit)
+    journey.log_exit(mock_exit)
     expect(journey.exit_station).to eq(mock_exit)
   end
 
   it "stores the whole journey" do
-    journey.touch_out(mock_exit)
+    journey.log_exit(mock_exit)
     expect(journey.log).to eq({entry: mock_entry, exit: mock_exit})
   end
 end

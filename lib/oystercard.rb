@@ -2,7 +2,7 @@ require_relative 'station'
 
 class Oystercard
 
-  attr_reader :balance, :all_journeys, :journey
+  attr_reader :balance, :all_journeys
 
   DEFAULT_MAX = 90
   MIN_FARE = 1
@@ -29,7 +29,7 @@ class Oystercard
 
   def touch_out(exit_station)
     if !@journey.nil?
-      @journey.touch_out(exit_station)
+      @journey.log_exit(exit_station)
       store_journey(exit_station)
     end
     deduct_fare

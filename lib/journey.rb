@@ -5,16 +5,16 @@ class Journey
   def initialize(entry_station)
     @log = {}
     @entry_station = entry_station
-    touch_in
+    log_entry
   end
 
-  def touch_in
-    @log[:entry] = entry_station
+  def log_entry
+    @log[:entry] = @entry_station
   end
 
-  def touch_out(exit_station)
-    @exit_station = exit_station
+  def log_exit(exit_station)
     @log[:exit] = exit_station
+    @exit_station = exit_station
   end
 
   def log
