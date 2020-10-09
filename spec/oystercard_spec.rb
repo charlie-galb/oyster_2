@@ -10,7 +10,7 @@ describe Oystercard do
   end
 
   it 'initializes @journeys with an empty array' do
-    expect(card.journeys).to be_empty
+    expect(card.all_journeys).to be_empty
   end
 
   it 'can have money added to it' do
@@ -49,27 +49,49 @@ describe Oystercard do
       card.touch_in(mock_entry)
       expect { card.touch_out(mock_exit) }.to change {card.balance}.by -1
     end
-  end
-
-  describe '#store_journey' do
-    it 'stores the journey in @journeys' do
+    it 'deducts penalty fare from balance' do
       card.top_up(10)
-      card.touch_in(mock_entry)
-      card.touch_out(mock_exit)
-      expect(card.journeys).to include({entry: mock_entry, exit: mock_exit})
+      expect { card.touch_out(mock_exit) }.to change {card.balance}.by -6
     end
   end
 
-  it 'remembers multiple journeys' do
-    card.top_up(10)
-
-    2.times {
+  describe '#store_journey' do
+    it 'stores the journey in @all_journeys' do
+      card.top_up(10)
       card.touch_in(mock_entry)
       card.touch_out(mock_exit)
-    }
+      expect(card.all_journeys).to include({entry: mock_entry, exit: mock_exit})
+    end
 
-    expect(card.journeys.count).to eq 2
-    expect(card.journeys).to eq([{entry: mock_entry, exit: mock_exit}, {entry: mock_entry, exit: mock_exit}])
+    it 'remembers multiple journeys' do
+      card.top_up(10)
+
+      2.times {
+        card.touch_in(mock_entry)
+        card.touch_out(mock_exit)
+      }
+
+      expect(card.all_journeys.count).to eq 2
+      expect(card.all_journeys).to eq([{entry: mock_entry, exit: mock_exit}, {entry: mock_entry, exit: mock_exit}])
+    end
   end
 
+  describe "#fare" do
+    before do
+      card.top_up(20)
+    end
+    it 'returns the minimum fare if users behave correctly' do
+      card.touch_in(mock_entry)
+      card.touch_out(mock_exit)
+      expect(card.fare).to eq(1)
+    end
+    it 'returns the penalty fare if a user forgets to #touch_in' do
+      card.touch_out("East Finchley")
+      expect(card.fare).to eq(6)
+    end
+    it 'returns the penalty fare if a user forgets to #touch_out' do
+      card.touch_in("East Finchley")
+      expect(card.fare).to eq(6)
+    end
+  end
 end

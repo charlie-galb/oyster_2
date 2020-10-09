@@ -2,14 +2,15 @@ require_relative 'station'
 
 class Oystercard
 
-  attr_reader :balance, :journeys, :journey
+  attr_reader :balance, :all_journeys, :journey
 
   DEFAULT_MAX = 90
   MIN_FARE = 1
+  PEN_FARE = 6
 
   def initialize
     @balance = 0
-    @journeys = []
+    @all_journeys = []
   end
 
   def top_up(cash)
@@ -27,22 +28,32 @@ class Oystercard
   end
 
   def touch_out(exit_station)
-    @journey.touch_out(exit_station)
-    store_journey(exit_station)
+    if !@journey.nil?
+      @journey.touch_out(exit_station)
+      store_journey(exit_station)
+    end
     deduct_fare
+  end
+
+  def fare
+    if (@journey.nil?) || ((@journey.log.include?(:entry)) && (!@journey.log.include?(:exit)))
+      PEN_FARE
+    else
+      MIN_FARE
+    end
   end
 
   private
 
   def store_journey(exit_station)
-    @journeys << @journey.log
+    @all_journeys << @journey.log
   end
 
   def insufficient_funds?
     @balance < MIN_FARE
   end
 
-  def deduct_fare(fare = MIN_FARE)
+  def deduct_fare
     @balance -= fare
   end
 

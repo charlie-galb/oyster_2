@@ -1,9 +1,13 @@
 require 'station'
 
 describe Station do
+  let(:card) { Oystercard.new }
   subject(:station) { Station.new("High Barnet", 5) }
-  it "exists when created" do
-    expect(station).to be_an_instance_of(Station)
+
+  xit "is created when a person touches in" do
+    card.top_up(10)
+    card.touch_in("Colliers Wood")
+    expect(Station).to receive(:new)
   end
   it "has a name on initialize" do
     expect(station.name).to eq("High Barnet")

@@ -2,30 +2,31 @@ require 'journey'
 require 'oystercard'
 
 describe Journey do
-  #let(:station) { double('fake station', name: "High Barnet", zone: 1) }
-  #let(:card) { card.new("High Barnet") }
+  let(:mock_entry) { double("fake entry station")}
+  let(:mock_exit) { double("fake exit station")}
+  let(:card) { Oystercard.new }
+  subject(:journey) { Journey.new(mock_entry)}
 
-  it "creates a new journey on touch in" do
-    card = Oystercard.new
-    card.top_up(10)
-    card.touch_in("High Barnet")
-    expect(card.journey).to be_an_instance_of(Journey)
+  before do
+    card.top_up(50)
+  end
+
+  it "is created on touch in" do
+    expect(Journey).to receive(:new)
+    card.touch_in(mock_entry)
   end
 
   it "stores the entry station" do
-    journey = Journey.new("High Barnet")
-    expect(journey.entry_station).to eq("High Barnet")
+    expect(journey.entry_station).to eq(mock_entry)
   end
 
-  it "stores the entry station" do
-    journey = Journey.new("High Barnet")
-    journey.touch_out("Colliers Wood")
-    expect(journey.exit_station).to eq("Colliers Wood")
+  it "stores the exit station" do
+    journey.touch_out(mock_exit)
+    expect(journey.exit_station).to eq(mock_exit)
   end
 
   it "stores the whole journey" do
-    journey = Journey.new("High Barnet")
-    journey.touch_out("Colliers Wood")
-    expect(journey.log).to eq({entry: "High Barnet", exit: "Colliers Wood"})
+    journey.touch_out(mock_exit)
+    expect(journey.log).to eq({entry: mock_entry, exit: mock_exit})
   end
 end
