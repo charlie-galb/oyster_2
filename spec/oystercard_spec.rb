@@ -56,7 +56,7 @@ describe Oystercard do
       card.top_up(10)
       card.touch_in(mock_entry)
       card.touch_out(mock_exit)
-      expect(card.journeys).to include({entry_station: mock_entry, exit_station: mock_exit})
+      expect(card.journeys).to include({entry: mock_entry, exit: mock_exit})
     end
   end
 

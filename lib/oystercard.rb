@@ -23,10 +23,11 @@ class Oystercard
   end
 
   def in_journey?
-    @journey.log[:exit_station] != nil
+    (@journey.log.include?(:entry)) && !(@journey.log.include?(:exit))
   end
 
   def touch_out(exit_station)
+    @journey.touch_out(exit_station)
     store_journey(exit_station)
     deduct_fare
   end

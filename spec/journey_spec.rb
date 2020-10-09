@@ -26,6 +26,6 @@ describe Journey do
   it "stores the whole journey" do
     journey = Journey.new("High Barnet")
     journey.touch_out("Colliers Wood")
-    expect(journey.log).to eq({entry_station: "High Barnet", exit_station: "Colliers Wood"})
+    expect(journey.log).to eq({entry: "High Barnet", exit: "Colliers Wood"})
   end
 end
